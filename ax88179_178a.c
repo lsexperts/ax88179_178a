@@ -48,7 +48,7 @@
 
 #include "ax88179_178a.h"
 
-#define DRV_VERSION	"1.13.0"
+#define DRV_VERSION	"1.14.0"
 
 static char version[] =
 KERN_INFO "ASIX USB Ethernet Adapter:v" DRV_VERSION
@@ -1299,10 +1299,12 @@ static int ax88179_check_ether_addr(struct usbnet *dev)
 {
 	unsigned char *tmp = (unsigned char*)dev->net->dev_addr;
 	u8 default_mac[6] = {0, 0x0e, 0xc6, 0x81, 0x79, 0x01};
+	u8 default_mac_178a[6] = {0, 0x0e, 0xc6, 0x81, 0x78, 0x01};
 
 	if (((*((u8*)tmp) == 0) && (*((u8*)tmp + 1) == 0) && (*((u8*)tmp + 2) == 0)) ||
 	    !is_valid_ether_addr((u8*)tmp) ||
-	    !memcmp(dev->net->dev_addr, default_mac, ETH_ALEN)) {
+	    !memcmp(dev->net->dev_addr, default_mac, ETH_ALEN) ||
+	    !memcmp(dev->net->dev_addr, default_mac_178a, ETH_ALEN)) {
 		int i;
 
 		printk("Found invalid EEPROM MAC address value ");
@@ -1316,7 +1318,9 @@ static int ax88179_check_ether_addr(struct usbnet *dev)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 4, 0)
 		eth_hw_addr_random(dev->net);
 #else
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 36)
 		dev->net->addr_assign_type |= NET_ADDR_RANDOM;
+#endif
 		random_ether_addr(dev->net->dev_addr); 
 #endif
 		*tmp = 0;
