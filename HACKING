@@ -1,0 +1,5 @@
+# Development of ax88179_178a
+## travis-ci.org integration
+The build requires the installation of ``linux-headers-`uname -r``` and ``linux-image-`uname -r``` which fails due to `apt-get` error 
+`E: Unable to locate package linux-headers-2.6.32-042stab090.5` on [travis-ci.org](https://travis-ci.org). One would have to figure out an available version for 
+`linux-headers-[version]` and `linux-image-[version]` packages and set the `KERNEL_VERSION` `make` variable. This is not worth it and there're a lot of good CI tools out there.

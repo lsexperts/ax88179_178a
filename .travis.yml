@@ -1,9 +1,0 @@
-language: c
-compiler:
- - gcc
- - clang
-before_install:
- - sudo apt-get update -qq
-# sudo apt-get install linux-headers-generic not sufficient (causes `make: *** /lib/modules/2.6.32-042stab108.2/build: No such file or directory.  Stop.`)
- - sudo apt-get build-dep linux
-script: make && sudo make install
